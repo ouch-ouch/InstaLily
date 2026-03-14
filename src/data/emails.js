@@ -1,5 +1,5 @@
 // Mock B2B Sales Emails
-const emails = [
+export const emails = [
   {
     id: 1, from: "Marcus Webb", fromEmail: "m.webb@redpinelumber.com", avatar: "MW", avatarColor: "#1a73e8",
     to: "sales@instalily.com", subject: "Interested in your inventory tracking module",
@@ -141,5 +141,3 @@ const emails = [
     date: "2026-02-15T19:30:00Z", read: true, starred: false, label: "inbox"
   }
 ];
-
-const drafts = [];
