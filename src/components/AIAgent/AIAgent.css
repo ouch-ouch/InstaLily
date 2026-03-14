@@ -1,15 +1,25 @@
-.ai-agent-container {
+.ai-agent-overlay-container {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--topbar-height));
   z-index: 100;
-  font-family: 'Google Sans', 'Roboto', sans-serif;
+  pointer-events: none; /* let clicks pass through when closed */
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: flex-end;
 }
 
-.ai-agent-trigger {
+.ai-agent-overlay-container.open {
+  pointer-events: auto; /* catch clicks inside the panel */
+}
+
+/* Floating Action Button Trigger */
+.ai-floating-trigger {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
   width: 56px;
   height: 56px;
   border-radius: 28px;
@@ -23,11 +33,10 @@
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: none;
   outline: none;
-  position: relative;
-  z-index: 2;
+  pointer-events: auto; /* Needs to be clickable */
 }
 
-.ai-agent-trigger:hover {
+.ai-floating-trigger:hover {
   transform: scale(1.05) translateY(-2px);
   box-shadow: 0 8px 24px rgba(118, 75, 162, 0.6);
 }
@@ -44,18 +53,20 @@
   100% { transform: scale(1) rotate(360deg); }
 }
 
+/* Overlay Panel covering left sidebar */
 .ai-agent-panel {
   position: absolute;
-  bottom: 72px; /* sits right above the floating button */
+  bottom: 0;
   left: 0;
-  width: 340px;
-  height: 480px;
-  background: rgba(255, 255, 255, 0.85);
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 24px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.2) inset;
+  border-top-right-radius: 24px;
+  border-top: 1px solid rgba(118, 75, 162, 0.3);
+  border-right: 1px solid rgba(118, 75, 162, 0.3);
+  box-shadow: 4px -4px 24px rgba(0, 0, 0, 0.25); /* Glow effect */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -63,11 +74,11 @@
   pointer-events: none;
   transform: translateY(20px) scale(0.95);
   transform-origin: bottom left;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
 }
 
-.ai-agent-container.open .ai-agent-panel {
+.ai-agent-overlay-container.open .ai-agent-panel {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0) scale(1);
@@ -75,10 +86,10 @@
 
 /* Dark mode overrides */
 [data-theme="dark"] .ai-agent-panel {
-  background: rgba(30, 30, 30, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.05) inset;
-  color: #fff;
+  background: rgba(30, 30, 30, 0.95);
+  border-top: 1px solid rgba(163, 187, 251, 0.3);
+  border-right: 1px solid rgba(163, 187, 251, 0.3);
+  box-shadow: 4px -4px 24px rgba(163, 187, 251, 0.2);
 }
 
 /* Panel Header */
@@ -103,7 +114,7 @@
   justify-content: center;
   color: white;
   margin-right: 12px;
-  box-shadow: 0 2px 8px rgba(118, 75, 162, 0.3);
+  flex-shrink: 0;
 }
 
 .ai-avatar svg {
@@ -114,12 +125,14 @@
 .ai-header-text {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .ai-header-text h3 {
+  font-family: 'Google Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
-  margin: 0 0 2px 0;
+  margin: 0;
   color: var(--text-primary);
 }
 
@@ -127,6 +140,30 @@
   font-size: 12px;
   color: var(--text-secondary);
   font-weight: 400;
+}
+
+.ai-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ai-close-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.ai-close-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* Chat Area */
@@ -137,23 +174,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  scrollbar-width: thin;
-}
-
-.ai-chat-area::-webkit-scrollbar {
-  width: 4px;
-}
-.ai-chat-area::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.2);
-  border-radius: 4px;
-}
-[data-theme="dark"] .ai-chat-area::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
 }
 
 .ai-message-bubble {
-  max-width: 85%;
-  padding: 10px 14px;
+  max-width: 90%;
+  padding: 12px 16px;
   border-radius: 16px;
   font-size: 14px;
   line-height: 1.5;
@@ -188,21 +213,17 @@
 /* Input Area */
 .ai-input-area {
   display: flex;
-  padding: 12px 16px;
-  border-top: 1px solid rgba(0,0,0,0.05);
-  background: rgba(255,255,255,0.5);
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-sidebar);
   align-items: center;
-  gap: 8px;
-}
-[data-theme="dark"] .ai-input-area {
-  border-top: 1px solid rgba(255,255,255,0.05);
-  background: rgba(0,0,0,0.2);
+  gap: 12px;
 }
 
 .ai-input-area input {
   flex: 1;
-  background: rgba(0,0,0,0.04);
-  border: 1px solid transparent;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 10px 16px;
   font-size: 14px;
@@ -212,21 +233,16 @@
   transition: all 0.2s;
 }
 .ai-input-area input:focus {
-  background: rgba(255,255,255,0.9);
-  border: 1px solid #1a73e8;
+  border-color: #1a73e8;
   box-shadow: 0 0 0 2px rgba(26,115,232,0.1);
 }
-[data-theme="dark"] .ai-input-area input {
-  background: rgba(255,255,255,0.08);
-}
 [data-theme="dark"] .ai-input-area input:focus {
-  background: rgba(0,0,0,0.5);
   border-color: #8ab4f8;
 }
 
 .ai-send-btn {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #1a73e8;
   color: white;
@@ -252,7 +268,29 @@
   background: rgba(255,255,255,0.1);
 }
 .ai-send-btn svg {
-  width: 16px;
-  height: 16px;
-  margin-left: -2px; /* optical alignment */
+  width: 18px;
+  height: 18px;
+  margin-left: -2px;
+}
+
+/* Tablet / Mobile adaptations */
+@media (max-width: 900px) {
+  .ai-agent-overlay-container {
+    width: 100vw;
+    height: 100vh;
+  }
+  .ai-agent-overlay-container.open {
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+  .ai-agent-overlay-container.open .ai-agent-panel {
+    position: relative;
+    width: 100%;
+    height: 80%;
+    max-height: 600px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
 }

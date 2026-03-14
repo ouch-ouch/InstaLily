@@ -21,37 +21,34 @@ export default function AIAgentWidget() {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
-    // Add user message
     const newMsg = { id: Date.now(), text: inputValue.trim(), sender: 'user' };
     setMessages(prev => [...prev, newMsg]);
     setInputValue('');
 
-    // Mock AI response
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
-        { id: Date.now() + 1, text: "I'm a mockup for your product design showcase! But I'd be happy to help draft that email or summarize your latest leads.", sender: 'ai' }
+        { id: Date.now() + 1, text: "I'm a mockup for your product design showcase! I can help draft emails or summarize leads.", sender: 'ai' }
       ]);
     }, 1000);
   };
 
   return (
-    <div 
-      className={`ai-agent-container ${isOpen ? 'open' : ''}`}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
+    <div className={`ai-agent-overlay-container ${isOpen ? 'open' : ''}`}>
       {/* Floating Action Button Trigger */}
-      <button 
-        className="ai-agent-trigger"
-        aria-label="Open AI Assistant"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sparkle-icon">
-          <path d="M12 3v18M3 12h18M5 5l14 14M5 19L19 5"/>
-        </svg>
-      </button>
+      {!isOpen && (
+        <button 
+          className="ai-floating-trigger"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open AI Assistant"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sparkle-icon">
+            <path d="M12 3v18M3 12h18M5 5l14 14M5 19L19 5"/>
+          </svg>
+        </button>
+      )}
 
-      {/* Glassmorphic Chat Panel */}
+      {/* Overlay Chat Panel */}
       <div className="ai-agent-panel">
         <div className="ai-panel-header">
           <div className="ai-avatar">
@@ -65,8 +62,11 @@ export default function AIAgentWidget() {
           </div>
           <div className="ai-header-text">
             <h3>InstaLily AI</h3>
-            <span>Your personal sales assistant</span>
+            <span>Sales assistant</span>
           </div>
+          <button className="ai-close-btn" onClick={() => setIsOpen(false)} aria-label="Close AI">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
 
         <div className="ai-chat-area">
@@ -81,12 +81,12 @@ export default function AIAgentWidget() {
         <form className="ai-input-area" onSubmit={handleSend}>
           <input 
             type="text" 
-            placeholder="Ask Lily to draft an email..." 
+            placeholder="Ask Lily..." 
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
           <button type="submit" className="ai-send-btn" disabled={!inputValue.trim()}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"/>
               <polygon points="22 2 15 22 11 13 2 9 22 2"/>
             </svg>
