@@ -6,6 +6,7 @@ import EmailList from './components/EmailList.jsx';
 import EmailReader from './components/EmailReader.jsx';
 import ComposeModal from './components/ComposeModal.jsx';
 import Toast from './components/Toast.jsx';
+import AIAgentWidget from './components/AIAgent/AIAgentWidget.jsx';
 
 // ---- Helpers ----
 export function formatDate(dateStr) {
@@ -196,6 +197,8 @@ export default function App() {
         onClose={() => setComposeState(s => ({ ...s, open: false }))}
         onSend={sendEmail}
       />
+
+      <AIAgentWidget />
 
       <Toast message={toastMsg} onDone={() => setToastMsg('')} />
     </div>

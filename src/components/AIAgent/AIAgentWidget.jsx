@@ -1,0 +1,98 @@
+import { useState, useRef, useEffect } from 'react';
+import './AIAgent.css';
+
+export default function AIAgentWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { id: 1, text: "Hi! I'm Lily, your AI sales assistant. How can I help you manage your inbox today?", sender: 'ai' }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isOpen]);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    // Add user message
+    const newMsg = { id: Date.now(), text: inputValue.trim(), sender: 'user' };
+    setMessages(prev => [...prev, newMsg]);
+    setInputValue('');
+
+    // Mock AI response
+    setTimeout(() => {
+      setMessages(prev => [
+        ...prev,
+        { id: Date.now() + 1, text: "I'm a mockup for your product design showcase! But I'd be happy to help draft that email or summarize your latest leads.", sender: 'ai' }
+      ]);
+    }, 1000);
+  };
+
+  return (
+    <div 
+      className={`ai-agent-container ${isOpen ? 'open' : ''}`}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      {/* Floating Action Button Trigger */}
+      <button 
+        className="ai-agent-trigger"
+        aria-label="Open AI Assistant"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sparkle-icon">
+          <path d="M12 3v18M3 12h18M5 5l14 14M5 19L19 5"/>
+        </svg>
+      </button>
+
+      {/* Glassmorphic Chat Panel */}
+      <div className="ai-agent-panel">
+        <div className="ai-panel-header">
+          <div className="ai-avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h0a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+              <path d="M12 18v4M9 22h6"/>
+              <rect x="5" y="8" width="14" height="10" rx="2"/>
+              <circle cx="9" cy="13" r="1" fill="currentColor"/>
+              <circle cx="15" cy="13" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <div className="ai-header-text">
+            <h3>InstaLily AI</h3>
+            <span>Your personal sales assistant</span>
+          </div>
+        </div>
+
+        <div className="ai-chat-area">
+          {messages.map(msg => (
+            <div key={msg.id} className={`ai-message-bubble ${msg.sender}`}>
+              {msg.text}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <form className="ai-input-area" onSubmit={handleSend}>
+          <input 
+            type="text" 
+            placeholder="Ask Lily to draft an email..." 
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button type="submit" className="ai-send-btn" disabled={!inputValue.trim()}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
