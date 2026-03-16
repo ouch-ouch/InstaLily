@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import './AIAgent.css';
+import lilyLogo from '../../data/image.png';
 
 export default function AIAgentWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,9 +43,7 @@ export default function AIAgentWidget() {
           onClick={() => setIsOpen(true)}
           aria-label="Open AI Assistant"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sparkle-icon">
-            <path d="M12 3v18M3 12h18M5 5l14 14M5 19L19 5"/>
-          </svg>
+          <img src={lilyLogo} alt="Lily AI Assistant" className="trigger-logo" />
         </button>
       )}
 

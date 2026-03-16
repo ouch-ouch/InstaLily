@@ -20,37 +20,56 @@
   position: absolute;
   bottom: 24px;
   left: 24px;
-  width: 56px;
-  height: 56px;
-  border-radius: 28px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(118, 75, 162, 0.4);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border: none;
-  outline: none;
-  pointer-events: auto; /* Needs to be clickable */
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: absolute;
+  pointer-events: auto;
+}
+
+.trigger-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition-duration: 0.3s;
 }
 
 .ai-floating-trigger:hover {
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 8px 24px rgba(118, 75, 162, 0.6);
+  width: 140px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(181, 160, 255);
+  align-items: center;
 }
 
-.sparkle-icon {
-  width: 24px;
-  height: 24px;
-  animation: pulse-spin 3s infinite linear;
+.ai-floating-trigger:hover .trigger-logo {
+  transition-duration: 0.3s;
+  transform: translateY(-200%);
 }
 
-@keyframes pulse-spin {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.1) rotate(180deg); }
-  100% { transform: scale(1) rotate(360deg); }
+.ai-floating-trigger::before {
+  position: absolute;
+  bottom: -20px;
+  content: "Ask Lily";
+  color: white;
+  font-size: 0px;
+}
+
+.ai-floating-trigger:hover::before {
+  font-size: 13px;
+  opacity: 1;
+  bottom: unset;
+  transition-duration: 0.3s;
 }
 
 /* Overlay Panel covering left sidebar */
@@ -108,7 +127,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ea66d8 0%, #764ba2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
