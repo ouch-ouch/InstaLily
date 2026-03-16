@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import './AIAgent.css';
 import lilyLogo from '../../data/image.png';
 
-export default function AIAgentWidget() {
+export default function AIAgentWidget({ composeState }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi! I'm Lily, your AI sales assistant. How can I help you manage your inbox today?", sender: 'ai' }
@@ -34,12 +34,14 @@ export default function AIAgentWidget() {
     }, 1000);
   };
 
+  const isComposing = composeState?.open;
+
   return (
-    <div className={`ai-agent-overlay-container ${isOpen ? 'open' : ''}`}>
+    <div className={`ai-agent-overlay-container ${isOpen ? 'open' : ''} ${isComposing ? 'composing' : ''}`}>
       {/* Floating Action Button Trigger */}
       {!isOpen && (
         <button 
-          className="ai-floating-trigger"
+          className={`ai-floating-trigger ${isComposing ? 'active' : ''}`}
           onClick={() => setIsOpen(true)}
           aria-label="Open AI Assistant"
         >
