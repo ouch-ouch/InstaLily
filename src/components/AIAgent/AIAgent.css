@@ -41,38 +41,130 @@
   width: 24px;
   height: 24px;
   object-fit: contain;
-  transition-duration: 0.3s;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 1;
 }
 
 .ai-floating-trigger:hover,
 .ai-floating-trigger.active {
-  width: 140px;
+  width: 200px; /* Reduced since logo is gone */
+  height: 64px; /* Increased height for breathing room */
   border-radius: 50px;
   transition-duration: 0.3s;
-  background-color: rgb(181, 160, 255);
+  background-color: #171717; /* Soho black theme */
+  border: 1px solid rgba(255, 255, 255, 0.15);
   align-items: center;
+}
+
+.ai-trigger-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0 20px; /* Increased padding */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.ai-floating-trigger:hover .ai-trigger-content,
+.ai-floating-trigger.active .ai-trigger-content {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .ai-floating-trigger:hover .trigger-logo,
 .ai-floating-trigger.active .trigger-logo {
-  transition-duration: 0.3s;
-  transform: translateY(-200%);
+  opacity: 0;
+  transform: scale(0);
+  width: 0;
 }
 
-.ai-floating-trigger::before {
-  position: absolute;
-  bottom: -20px;
-  content: "Ask Lily";
+.ai-trigger-text {
   color: white;
-  font-size: 0px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.ai-floating-trigger:hover::before,
-.ai-floating-trigger.active::before {
-  font-size: 13px;
-  opacity: 1;
-  bottom: unset;
-  transition-duration: 0.3s;
+/* Client Data Styles */
+.ai-client-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px; /* Increased padding */
+  width: 100%;
+}
+
+.priority-row {
+  width: 100%;
+}
+
+.priority-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.priority-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease-out;
+}
+
+/* Color code the priority 1 to 5 */
+.priority-1 { background: #ff5252; }
+.priority-2 { background: #ff5252; }
+.priority-3 { background: #ffb142; }
+.priority-4 { background: #33d9b2; }
+.priority-5 { background: #33d9b2; }
+
+.ai-client-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.ai-revenue-tag {
+  color: white;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ai-status-tag {
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ai-status-tag.demo {
+  background: rgba(51, 217, 178, 0.3);
+  color: #d1ffd6;
+}
+
+.ai-status-tag.new {
+  background: rgba(255, 177, 66, 0.3);
+  color: #ffe6b3;
 }
 
 /* Overlay Panel covering left sidebar */
@@ -315,7 +407,6 @@
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
-  
   .ai-floating-trigger {
     position: fixed;
     bottom: 24px;
@@ -324,7 +415,8 @@
     z-index: 999;
   }
   
-  .ai-floating-trigger:hover {
-    width: 140px; /* slightly smaller expansion on mobile */
+  .ai-floating-trigger:hover,
+  .ai-floating-trigger.active {
+    width: 180px; /* slightly smaller expansion on mobile but wide enough for data */
   }
 }

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import './AIAgent.css';
 import lilyLogo from '../../data/image.png';
 
-export default function AIAgentWidget({ composeState }) {
+export default function AIAgentWidget({ composeState, emails = [] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi! I'm Lily, your AI sales assistant. How can I help you manage your inbox today?", sender: 'ai' }
@@ -35,6 +35,7 @@ export default function AIAgentWidget({ composeState }) {
   };
 
   const isComposing = composeState?.open;
+  const currentEmail = composeState?.replyToId ? emails.find(e => e.id === composeState.replyToId) : null;
 
   return (
     <div className={`ai-agent-overlay-container ${isOpen ? 'open' : ''} ${isComposing ? 'composing' : ''}`}>
@@ -46,6 +47,28 @@ export default function AIAgentWidget({ composeState }) {
           aria-label="Open AI Assistant"
         >
           <img src={lilyLogo} alt="Lily AI Assistant" className="trigger-logo" />
+          <div className="ai-trigger-content">
+            {isComposing && currentEmail ? (
+              <div className="ai-client-data">
+                <div className="priority-row" title={`Priority: ${currentEmail.priority}/5`}>
+                  <div className="priority-label">Priority</div>
+                  <div className="priority-track">
+                    <div 
+                      className={`priority-fill priority-${currentEmail.priority}`} 
+                      style={{ width: `${(currentEmail.priority / 5) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="ai-client-tags">
+                  <span className="ai-revenue-tag">{currentEmail.likelyRevenue}</span>
+                  {currentEmail.justDemoed && <span className="ai-status-tag demo">Demoed</span>}
+                  {currentEmail.initialContact && <span className="ai-status-tag new">New</span>}
+                </div>
+              </div>
+            ) : (
+              <span className="ai-trigger-text">Ask Lily</span>
+            )}
+          </div>
         </button>
       )}
 

@@ -1,4 +1,5 @@
 import { formatDateFull } from '../App.jsx';
+import ClientDataBadge from './AIAgent/ClientDataBadge.jsx';
 
 function StarIcon({ filled }) {
   return filled
@@ -58,13 +59,16 @@ export default function EmailReader({ email, isOpen, onClose, onArchive, onDelet
         <h1 className="reader-subject">{email.subject}</h1>
         <div className="reader-header">
           <div className="reader-avatar" style={{ background: email.avatarColor }}>{email.avatar}</div>
-          <div className="reader-meta">
+          <div className="reader-meta" style={{ flex: 1 }}>
             <div className="reader-from-name">
               {email.from}{' '}
               <span style={{ fontWeight: 400, color: 'var(--text-secondary)' }}>&lt;{email.fromEmail}&gt;</span>
             </div>
             <div className="reader-from-email">to me</div>
             <div className="reader-date-full">{formatDateFull(email.date)}</div>
+          </div>
+          <div className="reader-client-data" style={{ marginRight: '16px' }}>
+            <ClientDataBadge email={email} />
           </div>
           <div className="reader-actions">
             <button
