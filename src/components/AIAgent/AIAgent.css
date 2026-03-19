@@ -343,8 +343,8 @@
   box-shadow: none;
 }
 [data-theme="dark"] .ai-message-bubble.user {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: #faf9f7; /* A soft beige color */
+  color: #171717; /* Dark text for contrast against beige */
 }
 
 /* Input Area */

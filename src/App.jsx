@@ -198,7 +198,7 @@ export default function App() {
         onSend={sendEmail}
       />
 
-      <AIAgentWidget composeState={composeState} emails={emails} />
+      <AIAgentWidget composeState={composeState} emails={emails} darkMode={darkMode} />
 
       <Toast message={toastMsg} onDone={() => setToastMsg('')} />
     </div>
