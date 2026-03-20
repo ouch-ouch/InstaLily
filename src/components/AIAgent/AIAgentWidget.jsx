@@ -95,7 +95,7 @@ export default function AIAgentWidget({ composeState, emails = [], darkMode = tr
                 height: '100%', 
                 objectFit: 'contain', 
                 borderRadius: '50%',
-                transform: !darkMode ? 'scale(0.9)' : 'scale(1.3)'
+                transform: !darkMode ? 'scale(0.9 )' : 'scale(1.3)'
               }}
             />
           </div>
